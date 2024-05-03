@@ -1,0 +1,79 @@
+NAME
+
+		addecho - given an input WAV file, add echo modifications, and
+		generate an output WAV file.
+
+
+SYNOPSIS
+
+		#include <string.h>
+		#include <unistd.h>
+		#include <stdlib.h>
+		#include <stdio.h>
+
+
+		addecho [OPTION] [OPTION] SOURCE_WAV DEST_WAV
+
+
+DESCRIPTION
+
+		addecho is a command-line tool for audio manipulation, 
+		specifically to apply an echo effect to mono WAV audio files. 
+		It is an intuitive way for users to enhance their audio files 
+		with added echo effects that can be customized through various
+		options. The addecho program adds an echo categorized by delay 
+		and volume scale. It takes an input WAV file in binary, 
+		applies the added delay and volume scale, and creates a WAV 
+		file with echo added. The file is read into an array header 
+		and the file size is updated to compile with an echo that is 
+		added. Space for the buffer is dynamically allocated and is 
+		used to store delay samples of original sounds, modified by 
+		volume scale. The input file is processed by mixing samples of
+		the original audio with scaled buffered samples and the 
+		maximum and minimum range to prevent overflow and underflow of 
+		the 16-bit WAV file. The added echo with the original audio is
+		placed in an output file.
+
+      	-d, --delay <delay>
+			The delay time “-d” in samples before the echo begins.
+            Default: 8000.
+		
+      	-v, --volume <volume_scale>
+            Sets volume scale for the echo effect.  “-v < 1” reduces 
+			the volume, whereas a “-v > 1” increases echo.
+            Default: 4.
+
+
+RETURN VALUES
+
+      	return 0: Success.
+       	return 1: An error occurred.
+	
+
+EXAMPLES
+
+       	addecho -d 5000 -v 3 input.wav output.wav
+		Applies an echo with a 5000 ms delay and a volume scale of 3 
+		to input.wav, saving the result in output.wav.
+		
+       	addecho input.wav output.wav
+		Applies the default echo effect of 8000 ms delay and a volume
+		scale of 4 to input.wav and saves the result in output.wav.
+		
+
+WARNINGS
+
+       	addecho only supports mono WAV files. Applying addecho to 
+		files in other formats may result in unpredictable behavior 
+		or data loss. Users should also be cautious with extremely 
+		high delay and volume scale values, as these can lead to audio
+		distortion.
+
+
+BUGS
+
+       	- Passing in non-mono wave files.
+		- Providing wrong relative path of input WAV file.
+		- Passing -d and -v with incorrect values (non-numeric) or 
+		  (alphanumeric).
+
